@@ -4,6 +4,9 @@ const favicon = require('serve-favicon');
 const hbs = require('hbs');
 const logger = require('morgan');
 
+
+const celebritiesRouter = require('./routes/celebrities');
+
 const app = express();
 
 // Express View engine setup
@@ -33,6 +36,7 @@ app.use(favicon(path.join(__dirname, 'public/images/favicon.ico')));
 const baseRouter = require('./routes');
 
 app.use('/', baseRouter);
+app.use('/', celebritiesRouter);
 
 // Catch 404 and render a not-found.hbs template
 app.use((req, res, next) => {
