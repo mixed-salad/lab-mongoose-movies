@@ -19,6 +19,18 @@ router.get('/celebrities', (req, res, next) => {
     });
 });
 
+router.get('/celebrities/:id/edit', (req, res, next) => {
+    const id = req.params.id;
+    Celebrity
+    .findById(id)
+    .then(celebrity => {
+        res.render('celebrities/edit', { celebrity });
+    })
+    .catch(error => {
+        next(error);
+    });
+})
+
 router.get('/celebrities/:id', (req, res, next) => {
     const id = req.params.id;
     Celebrity
@@ -31,6 +43,8 @@ router.get('/celebrities/:id', (req, res, next) => {
         next(error);
     });
 });
+
+
 
 router.post('/celebrities', (req, res, next) => {
     const data = req.body;
@@ -45,9 +59,39 @@ router.post('/celebrities', (req, res, next) => {
     })
     .catch( error => {
         next(error);
-        res.render('/celebrities/create');
+        res.render('celebrities/create');
     });
 
 })
+
+router.post('/celebrities/:id/delete', (req, res, next) => {
+    const id = req.params.id;
+    Celebrity
+    .findByIdAndRemove(id)
+    .then(()=> {
+        res.redirect('/celebrities');
+    })
+    .catch(error => {
+        next(error);
+    })
+});
+
+router.post('/celebrities/:id', (req, res, next) => {
+    const id = req.params.id;
+    const data = req.body;
+    const update = {
+        name: data.name,
+        occupation: data.occupation,
+        catchPhrase: data.catchPhrase
+    };
+    Celebrity
+    .findByIdAndUpdate(id, update)
+    .then(celebrity => {
+        res.redirect('/celebrities');
+    })
+    .catch(error => {
+        next(error);
+    });
+});
 
 module.exports = router;
